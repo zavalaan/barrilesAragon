@@ -15,37 +15,72 @@
      VARIABLES & RESET
   ============================================================ */
   :root {
-    --bg-0: #0e0600;
-    --bg-1: #150900;
-    --bg-2: #1e0d02;
-    --bg-3: #2c1507;
-    --orange: #c85a1a;
-    --orange-lt: #e07b2a;
-    --amber: #c9a227;
-    --amber-lt: #f0c040;
-    --gold: #d4af37;
-    --gold-lt: #f5d060;
-    --silver: #cdbfa6;
-    --cream: #fdf6e3;
-    --text: #ecdcbb;
-    --text-muted: #bda179;
+    /* ===== MONOCHROME BRAND PALETTE — light base ===== */
+    --bg-0: #ffffff;
+    --bg-1: #f5f5f3;
+    --bg-2: #ececea;
+    --bg-3: #e3e3e0;
 
-    /* Glassmorphism tokens */
-    --glass:        rgba(26,14,4,.55);
-    --glass-strong: rgba(18,10,2,.46);
-    --glass-light:  rgba(40,24,10,.28);
-    --glass-border: 1px solid rgba(201,162,39,.22);
-    --glass-blur:   blur(16px) saturate(125%);
-    --glass-shadow: 0 10px 44px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.07);
+    /* Accent tokens (names kept for cascade compatibility) → monochrome ink */
+    --orange:    #161616;
+    --orange-lt: #2e2e2e;
+    --amber:     #161616;
+    --amber-lt:  #2e2e2e;
+    --gold:      #161616;
+    --gold-lt:   #333333;
+    --silver:    #6f6f6f;
+    --cream:     #0a0a0a;   /* headings / strong text */
+    --text:      #2a2a2a;   /* body text */
+    --text-muted:#6f6f6f;
 
-    --border-gold: 1px solid rgba(201,162,39,.3);
-    --shadow-gold: 0 0 30px rgba(201,162,39,.25);
+    /* Contextual fills */
+    --btn-bg:  #0a0a0a; --btn-fg:  #ffffff;
+    --ring-bg: #0a0a0a; --ring-fg: #ffffff;
+
+    /* Glassmorphism tokens (light) */
+    --glass:        rgba(255,255,255,.55);
+    --glass-strong: rgba(255,255,255,.62);
+    --glass-light:  rgba(0,0,0,.04);
+    --glass-border: 1px solid rgba(0,0,0,.12);
+    --glass-blur:   blur(16px) saturate(115%);
+    --glass-shadow: 0 10px 44px rgba(0,0,0,.10), inset 0 1px 0 rgba(255,255,255,.65);
+
+    --border-gold: 1px solid rgba(0,0,0,.16);
+    --shadow-gold: 0 0 30px rgba(0,0,0,.08);
   }
+
+  /* ===== DARK SECTION CONTEXT (variables flip to monochrome dark) ===== */
+  .sec-dark, #hero, #navbar, #mobile-menu {
+    --bg-0: #0a0a0a;
+    --bg-1: #121212;
+    --bg-2: #181818;
+    --bg-3: #1f1f1f;
+    --orange:#ffffff; --orange-lt:#f0f0f0;
+    --amber:#ffffff;  --amber-lt:#f2f2f2;
+    --gold:#ffffff;   --gold-lt:#eaeaea;
+    --silver:#9a9a9a;
+    --cream:#fafafa;
+    --text:#d6d6d6;
+    --text-muted:#9a9a9a;
+    --btn-bg:#fafafa;  --btn-fg:#0a0a0a;
+    --ring-bg:#fafafa; --ring-fg:#0a0a0a;
+    --glass:        rgba(255,255,255,.06);
+    --glass-strong: rgba(255,255,255,.045);
+    --glass-light:  rgba(255,255,255,.10);
+    --glass-border: 1px solid rgba(255,255,255,.14);
+    --glass-shadow: 0 10px 44px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.06);
+    --border-gold: 1px solid rgba(255,255,255,.22);
+    --shadow-gold: 0 0 30px rgba(255,255,255,.10);
+  }
+
+  /* Section base backgrounds (alternating rhythm) */
+  .sec-light { background: var(--bg-0); color: var(--text); }
+  .sec-dark  { background: var(--bg-0); color: var(--text); }
   *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
   html { scroll-behavior:smooth; font-size:16px; }
   body {
     font-family:'EB Garamond', Georgia, serif;
-    background: var(--bg-0);
+    background: #ffffff;
     color: var(--text);
     line-height: 1.7;
     overflow-x: hidden;
@@ -58,14 +93,8 @@
   /* ============================================================
      FIXED PHOTOGRAPHIC BACKDROP (fluid scroll scenography)
   ============================================================ */
-  .bg-scene {
-    position:fixed; inset:0; z-index:0;
-    background:url('assets/header.png') center center / cover no-repeat;
-  }
-  .bg-scrim {
-    position:fixed; inset:0; z-index:0;
-    background:linear-gradient(180deg, rgba(14,6,0,.34) 0%, rgba(14,6,0,.40) 55%, rgba(14,6,0,.5) 100%);
-  }
+  .bg-scene { display:none; }
+  .bg-scrim { display:none; }
   /* All real content sits above the fixed scene */
   #navbar { z-index:1000; }
   #hero, #marcas, section, #footer { position:relative; z-index:1; }
@@ -107,11 +136,11 @@
     border:none; border-radius:3px; transition:all .3s ease; white-space:nowrap;
   }
   .btn-gold {
-    background: linear-gradient(135deg, var(--amber), var(--orange));
-    color: var(--bg-0); font-weight:700;
-    box-shadow: 0 6px 26px rgba(201,162,39,.45);
+    background: var(--btn-bg);
+    color: var(--btn-fg); font-weight:700;
+    box-shadow: 0 6px 22px rgba(0,0,0,.28);
   }
-  .btn-gold:hover { background:linear-gradient(135deg,var(--gold-lt),var(--orange-lt)); transform:translateY(-2px); box-shadow:0 10px 34px rgba(201,162,39,.6); }
+  .btn-gold:hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(0,0,0,.38); opacity:.9; }
   .btn-glass {
     background:rgba(253,246,227,.08);
     -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
@@ -122,7 +151,7 @@
   /* ============================================================
      SECTION HEADERS / ORNAMENTS
   ============================================================ */
-  .ornament { text-align:center; color:var(--amber); opacity:.6; font-size:1.05rem; letter-spacing:.6em; margin:.6rem 0; }
+  .ornament { font-size:0; line-height:0; margin:1rem auto .2rem; width:46px; height:1px; background:var(--amber); opacity:.4; }
   .section-header { text-align:center; margin-bottom:3.5rem; }
   .section-header h2 { font-family:'Playfair Display',Georgia,serif; font-size:clamp(1.9rem,4.5vw,3rem); font-weight:700; color:var(--cream); margin-bottom:.4rem; text-shadow:0 2px 18px rgba(0,0,0,.5); }
   .section-header p { font-style:italic; color:var(--text); opacity:.85; font-size:clamp(.95rem,1.8vw,1.15rem); }
@@ -137,7 +166,7 @@
     padding:1rem 2.5rem; transition:all .4s ease;
   }
   #navbar.scrolled {
-    background:rgba(14,6,0,.55);
+    background:rgba(10,10,10,.6);
     -webkit-backdrop-filter:blur(16px) saturate(125%);
     backdrop-filter:blur(16px) saturate(125%);
     padding:.55rem 2.5rem;
@@ -160,7 +189,7 @@
 
   #mobile-menu {
     display:none; position:fixed; inset:0; z-index:999;
-    background:rgba(14,6,0,.85);
+    background:rgba(8,8,8,.92);
     -webkit-backdrop-filter:blur(18px); backdrop-filter:blur(18px);
     flex-direction:column; align-items:center; justify-content:center; gap:2.2rem;
   }
@@ -179,7 +208,7 @@
   }
   #hero::before {
     content:''; position:absolute; inset:0; z-index:0; pointer-events:none;
-    background:linear-gradient(100deg, rgba(14,6,0,.94) 0%, rgba(14,6,0,.7) 40%, rgba(14,6,0,.15) 68%, rgba(14,6,0,.45) 100%);
+    background:radial-gradient(120% 85% at 18% 12%, rgba(255,255,255,.06) 0%, transparent 55%);
   }
   .hero-inner {
     position:relative; z-index:2; max-width:1200px; margin:0 auto;
@@ -280,11 +309,12 @@
   .step { position:relative; z-index:1; text-align:center; display:flex; flex-direction:column; align-items:center; gap:1rem; }
   .step-icon-ring {
     width:80px; height:80px; border-radius:50%;
-    background:linear-gradient(135deg, var(--amber), var(--orange));
+    background:var(--ring-bg); color:var(--ring-fg);
     display:flex; align-items:center; justify-content:center;
-    box-shadow:0 0 0 6px rgba(201,162,39,.14), 0 10px 26px rgba(0,0,0,.5); position:relative;
+    box-shadow:0 0 0 6px rgba(0,0,0,.06), 0 10px 26px rgba(0,0,0,.18); position:relative;
   }
-  .step-num { position:absolute; top:-6px; right:-6px; width:22px; height:22px; border-radius:50%; background:var(--bg-1); border:1px solid rgba(201,162,39,.6); font-family:'Cinzel', serif; font-size:.6rem; font-weight:700; color:var(--amber); display:flex; align-items:center; justify-content:center; }
+  .step-icon-ring svg, .step-icon-ring svg * { stroke:currentColor; }
+  .step-num { position:absolute; top:-6px; right:-6px; width:22px; height:22px; border-radius:50%; background:var(--bg-0); border:1px solid var(--amber); font-family:'Cinzel', serif; font-size:.6rem; font-weight:700; color:var(--amber); display:flex; align-items:center; justify-content:center; }
   .step h3 { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--cream); }
   .step p  { font-size:.95rem; color:var(--text); opacity:.8; font-style:italic; max-width:170px; }
 
@@ -317,7 +347,7 @@
     box-shadow:var(--glass-shadow);
   }
   .t-quote-mark { font-family:'Playfair Display', serif; font-size:6rem; color:var(--amber); opacity:.2; line-height:.4; margin-bottom:.4rem; }
-  .t-stars { color:var(--amber-lt); font-size:1.1rem; letter-spacing:.2em; margin-bottom:1.2rem; }
+  .t-stars { color:#d4af37; font-size:1.1rem; letter-spacing:.2em; margin-bottom:1.2rem; text-shadow:0 1px 6px rgba(212,175,55,.35); }
   .t-text { font-family:'Playfair Display', serif; font-size:clamp(1.15rem,2.4vw,1.5rem); font-style:italic; color:var(--cream); line-height:1.75; margin-bottom:1.6rem; }
   .t-author { font-family:'Cinzel', serif; font-size:.72rem; letter-spacing:.22em; color:var(--amber); }
   .t-event  { font-size:.85rem; color:var(--text); opacity:.7; margin-top:.3rem; font-style:italic; }
@@ -354,11 +384,32 @@
   .check-group { display:flex; flex-wrap:wrap; gap:.8rem; }
   .check-label { display:flex; align-items:center; gap:.45rem; font-size:1rem; color:var(--text); cursor:pointer; transition:color .3s; }
   .check-label:hover { color:var(--cream); }
-  .check-label input[type=checkbox] { width:auto; accent-color:var(--amber); cursor:pointer; }
   .radio-group { display:flex; flex-direction:column; gap:.45rem; }
   .radio-label { display:flex; align-items:flex-start; gap:.5rem; font-size:1rem; color:var(--text); cursor:pointer; line-height:1.4; transition:color .3s; }
   .radio-label:hover { color:var(--cream); }
-  .radio-label input[type=radio] { width:auto; accent-color:var(--amber); cursor:pointer; margin-top:.25rem; flex-shrink:0; }
+  /* Custom checkbox & radio — guaranteed visible state in any section */
+  .check-label input[type=checkbox],
+  .radio-label input[type=radio] {
+    -webkit-appearance:none; appearance:none;
+    width:18px; height:18px; min-width:18px; padding:0; margin:0; flex-shrink:0; position:relative;
+    border:1.5px solid var(--amber); background:transparent; cursor:pointer;
+    transition:background .2s ease, border-color .2s ease;
+  }
+  .radio-label input[type=radio] { margin-top:.18rem; }
+  .check-label input[type=checkbox] { border-radius:4px; }
+  .radio-label input[type=radio]   { border-radius:50%; }
+  .check-label input[type=checkbox]:checked,
+  .radio-label input[type=radio]:checked { background:var(--amber); border-color:var(--amber); }
+  .check-label input[type=checkbox]:checked::after {
+    content:''; position:absolute; left:5px; top:1.5px;
+    width:5px; height:9px; border:solid var(--bg-0); border-width:0 2px 2px 0;
+    transform:rotate(45deg);
+  }
+  .radio-label input[type=radio]:checked::after {
+    content:''; position:absolute; inset:3.5px; border-radius:50%; background:var(--bg-0);
+  }
+  .check-label input[type=checkbox]:focus-visible,
+  .radio-label input[type=radio]:focus-visible { outline:2px solid var(--amber); outline-offset:2px; }
   .form-submit { width:100%; justify-content:center; font-size:.85rem; padding:1rem; margin-top:.8rem; }
   .form-note { text-align:center; font-size:.85rem; color:var(--text); opacity:.65; font-style:italic; margin-top:.6rem; }
 
@@ -366,7 +417,7 @@
      WHATSAPP FLOAT
   ============================================================ */
   .wa-float { position:fixed; bottom:2rem; right:2rem; z-index:9999; display:flex; flex-direction:column; align-items:flex-end; gap:.65rem; }
-  .wa-bubble { background:rgba(14,6,0,.7); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); border:var(--glass-border); padding:.5rem 1rem; font-size:.9rem; color:var(--cream); border-radius:6px; white-space:nowrap; opacity:0; transform:translateX(8px); transition:all .3s ease; pointer-events:none; }
+  .wa-bubble { background:rgba(10,10,10,.82); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.16); padding:.5rem 1rem; font-size:.9rem; color:#fafafa; border-radius:6px; white-space:nowrap; opacity:0; transform:translateX(8px); transition:all .3s ease; pointer-events:none; }
   .wa-float:hover .wa-bubble { opacity:1; transform:translateX(0); }
   .wa-btn { width:58px; height:58px; border-radius:50%; background:#25d366; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(37,211,102,.5); animation:pulse-wa 2.2s infinite; transition:transform .3s; }
   .wa-btn:hover { transform:scale(1.12); animation-play-state:paused; }
@@ -374,7 +425,7 @@
   /* ============================================================
      FOOTER
   ============================================================ */
-  #footer { background:rgba(14,6,0,.92); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); border-top:var(--glass-border); padding:4rem 2.5rem 2rem; }
+  #footer { background:var(--bg-1); border-top:1px solid rgba(0,0,0,.10); padding:4rem 2.5rem 2rem; }
   .footer-grid { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:2fr 1fr 1fr; gap:3rem; margin-bottom:3rem; }
   .footer-brand-head { display:flex; align-items:center; gap:.9rem; margin-bottom:1rem; }
   .footer-brand-head img { width:58px; filter:drop-shadow(0 2px 8px rgba(0,0,0,.5)); }
@@ -388,7 +439,7 @@
   .footer-col li { margin-bottom:.55rem; }
   .footer-col a { color:var(--text); opacity:.75; font-size:.95rem; transition:all .3s; }
   .footer-col a:hover { color:var(--amber); opacity:1; }
-  .footer-bottom { max-width:1200px; margin:0 auto; padding-top:1.5rem; border-top:1px solid rgba(201,162,39,.12); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; }
+  .footer-bottom { max-width:1200px; margin:0 auto; padding-top:1.5rem; border-top:1px solid rgba(0,0,0,.10); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; }
   .footer-bottom p { color:var(--text); opacity:.6; font-size:.82rem; }
 
   /* ============================================================
@@ -423,14 +474,19 @@
     .steps-wrap { grid-template-columns:1fr; }
     .btn { padding:.75rem 1.4rem; font-size:.72rem; }
   }
+
+  /* ============================================================
+     MONOCHROME INTEGRATION (drop warm/barrel coloring)
+  ============================================================ */
+  .brand-badge svg { opacity:.96; transition:opacity .3s, transform .3s; }
+  .brand-badge:hover svg { opacity:1; }
+  .service-icon { filter:grayscale(1) contrast(1.08); }
+  .service-card.featured { border-color:var(--amber); }
   </style>
 </head>
 
 <body>
 
-<!-- Fixed photographic backdrop -->
-<div class="bg-scene"></div>
-<div class="bg-scrim"></div>
 
 
 <!-- ============================================================ NAVBAR ============================================================ -->
@@ -464,7 +520,7 @@
 
 
 <!-- ============================================================ HERO ============================================================ -->
-<section id="hero">
+<section id="hero" class="sec-dark">
   <div class="hero-inner">
     <div class="hero-glass">
       <img src="assets/logo-cream.png" class="hero-logo" alt="Los Barriles Aragón">
@@ -490,7 +546,7 @@
 
 
 <!-- ============================================================ BRAND BAND ============================================================ -->
-<div id="marcas">
+<div id="marcas" class="sec-light">
   <div class="brand-band-inner">
     <p class="brand-band-label">Cervezas disponibles en nuestros barriles</p>
     <div class="brand-track-wrap">
@@ -538,7 +594,7 @@
 
 
 <!-- ============================================================ SERVICES ============================================================ -->
-<section id="servicios" class="section-glass section-pad">
+<section id="servicios" class="sec-dark section-pad">
   <div style="max-width:1200px;margin:0 auto;">
     <div class="section-header">
       <span class="tag">Nuestros Servicios</span>
@@ -552,11 +608,15 @@
         <div class="service-corner"></div>
         <span class="service-tag">01 · Servicio Base</span>
         <svg class="service-icon" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="si1" x1="0%" x2="100%"><stop offset="0%" stop-color="#3d1a00"/><stop offset="50%" stop-color="#7a3a10"/><stop offset="100%" stop-color="#3d1a00"/></linearGradient></defs>
-          <path d="M16,6 C6,18 4,28 4,36 C4,44 6,50 16,54 L40,54 C50,50 52,44 52,36 C52,28 50,18 40,6 Z" fill="url(#si1)"/>
-          <ellipse cx="28" cy="6" rx="12" ry="4" fill="#5c2e00"/><ellipse cx="28" cy="54" rx="12" ry="4" fill="#2c1000"/>
-          <ellipse cx="28" cy="14" rx="16" ry="3.5" fill="#c9a227" opacity=".85"/><ellipse cx="28" cy="30" rx="19" ry="3.5" fill="#c9a227" opacity=".85"/><ellipse cx="28" cy="46" rx="16" ry="3.5" fill="#c9a227" opacity=".85"/>
-          <ellipse cx="28" cy="38" rx="3" ry="2" fill="#0e0600" stroke="#c9a227" stroke-width=".8"/>
+          <defs><linearGradient id="si1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#f0c040"/><stop offset="100%" stop-color="#b8780c"/></linearGradient></defs>
+          <!-- handle -->
+          <path d="M39,25 C49,25 49,41 39,41" fill="none" stroke="#c9a227" stroke-width="3.4"/>
+          <!-- mug body (beer) -->
+          <path d="M14,20 L40,20 L37.6,49 C37.4,51.2 35.6,52.5 33.5,52.5 L20.5,52.5 C18.4,52.5 16.6,51.2 16.4,49 Z" fill="url(#si1)" stroke="#9a7410" stroke-width="1.2"/>
+          <!-- shine -->
+          <rect x="21" y="26" width="3.4" height="20" rx="1.7" fill="#fff" opacity=".4"/>
+          <!-- foam head -->
+          <path d="M12.5,20 C9.5,19 9.5,14.5 13,14 C12.5,9.5 18,7.5 21,10.5 C22.5,6.5 29,6.5 31,11 C35,8.5 41.5,11.5 40,16.5 C43.5,16.5 44,21 40.5,21 Z" fill="#fff8e7" stroke="#c9a227" stroke-width="1"/>
         </svg>
         <h3>Renta de Barril</h3>
         <p>Tu barril listo, frío y directo a tu evento. Solo pides, nosotros entregamos.</p>
@@ -600,7 +660,7 @@
 
       <div class="service-card featured aos delay-3">
         <div class="service-corner"></div>
-        <span class="service-tag" style="color:#f0c040;">03 · Paquete Estrella ✦</span>
+        <span class="service-tag">03 · Paquete Estrella</span>
         <svg class="service-icon" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
           <path d="M4,38 L10,18 L22,30 L28,10 L34,30 L46,18 L52,38 Z" fill="#c9a227"/>
           <rect x="4" y="38" width="48" height="8" rx="2" fill="#c9a227" opacity=".8"/>
@@ -620,7 +680,7 @@
             <li>Set de fotos de la barra para redes</li>
           </ul>
         </div>
-        <a href="#cotizar" class="service-badge" style="border-color:rgba(240,192,64,.7);color:#f0c040;">¡Lo Quiero! →</a>
+        <a href="#cotizar" class="service-badge">¡Lo Quiero! →</a>
       </div>
 
     </div>
@@ -629,7 +689,7 @@
 
 
 <!-- ============================================================ HOW IT WORKS ============================================================ -->
-<section id="como-funciona" class="section-clear section-pad">
+<section id="como-funciona" class="sec-light section-pad">
   <div style="max-width:1200px;margin:0 auto;">
     <div class="section-header">
       <span class="tag">Proceso</span>
@@ -669,7 +729,7 @@
 
 
 <!-- ============================================================ GALLERY ============================================================ -->
-<section id="galeria" class="section-glass section-pad">
+<section id="galeria" class="sec-dark section-pad">
   <div style="max-width:1200px;margin:0 auto;">
     <div class="section-header">
       <span class="tag">Galería</span>
@@ -679,22 +739,16 @@
     </div>
     <div class="gallery-grid">
       <div class="gallery-item aos">
-        <img src="assets/header.png" alt="Barriles Los Barriles Aragón">
-        <div class="gallery-overlay"><span>Nuestros barriles</span></div>
+        <img src="assets/evento-1.jpg" alt="Bartender de Los Barriles Aragón en evento" loading="lazy">
+        <div class="gallery-overlay"><span>Bartender profesional</span></div>
       </div>
       <div class="gallery-item aos delay-1">
-        <div class="gallery-ph">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span class="gallery-ph-label">Servicio de bartender</span>
-        </div>
-        <div class="gallery-overlay"><span>Ver foto</span></div>
+        <img src="assets/evento-2.jpg" alt="Preparación de micheladas en evento" loading="lazy">
+        <div class="gallery-overlay"><span>Barra de micheladas</span></div>
       </div>
       <div class="gallery-item aos delay-2">
-        <div class="gallery-ph">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span class="gallery-ph-label">Barra de micheladas</span>
-        </div>
-        <div class="gallery-overlay"><span>Ver foto</span></div>
+        <img src="assets/evento-3.jpg" alt="Estación de Los Barriles Aragón montada" loading="lazy">
+        <div class="gallery-overlay"><span>Nuestra estación</span></div>
       </div>
       <div class="gallery-item aos delay-3">
         <div class="gallery-ph">
@@ -720,7 +774,7 @@
 
 
 <!-- ============================================================ TESTIMONIAL ============================================================ -->
-<section id="testimonial" class="section-clear section-pad">
+<section id="testimonial" class="sec-light section-pad">
   <div class="testimonial-card aos">
     <div class="t-quote-mark">"</div>
     <div class="t-stars">★ ★ ★ ★ ★</div>
@@ -737,7 +791,7 @@
 
 
 <!-- ============================================================ QUOTE FORM ============================================================ -->
-<section id="cotizar" class="section-glass section-pad">
+<section id="cotizar" class="sec-dark section-pad">
   <div class="form-layout">
     <div class="form-info">
       <div class="section-header" style="text-align:left;margin-bottom:2rem;">
@@ -769,7 +823,7 @@
       <form id="quote-form" novalidate>
         <div class="form-row">
           <div class="fgroup"><label for="f-nombre">Nombre completo *</label><input type="text" id="f-nombre" placeholder="Tu nombre" required></div>
-          <div class="fgroup"><label for="f-telefono">Teléfono *</label><input type="tel" id="f-telefono" placeholder="55 XXXX XXXX" required></div>
+          <div class="fgroup"><label for="f-telefono">Teléfono * <span style="text-transform:none;letter-spacing:0;opacity:.7;">(10 dígitos)</span></label><input type="tel" id="f-telefono" placeholder="5512345678" inputmode="numeric" maxlength="10" pattern="\d{10}" title="Ingresa exactamente 10 dígitos" required></div>
         </div>
         <div class="form-row">
           <div class="fgroup"><label for="f-fecha">Fecha del evento *</label><input type="date" id="f-fecha" required></div>
@@ -824,20 +878,19 @@
 
 
 <!-- ============================================================ FOOTER ============================================================ -->
-<footer id="footer">
+<footer id="footer" class="sec-light">
   <div class="footer-grid">
     <div class="footer-brand">
       <div class="footer-brand-head">
-        <img src="assets/logo-cream.png" alt="Los Barriles Aragón">
+        <img src="assets/logo-dark.png" alt="Los Barriles Aragón">
         <span class="footer-brand-name">Los Barriles Aragón</span>
       </div>
       <p class="footer-tagline">La cerveza perfecta para tu fiesta perfecta.</p>
       <p>Renta de barriles de cerveza y servicio de bartender profesional para eventos sociales en Ciudad de México. Con sabor y actitud desde la Colonia Aragón.</p>
       <div class="footer-social">
         <a href="https://instagram.com/losbarrilesaragonmx" target="_blank" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
-        <a href="https://wa.me/525582459065" target="_blank" aria-label="WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52 -.075-.149-.669-1.612-.916-2.207 -.242-.579 -.487 -.5 -.669 -.51 -.173 -.008 -.371 -.01 -.57 -.01 -.198 0 -.52 .074 -.792 .372 -.272 .297 -1.04 1.0₁₆ -₁₀₄ ₂₄₇₉ ₀ ₁₄₆₂ ₁₀₆₅ ₂₈₇₅ ₁₂₁₃ ₃₀₇₄ .₁₄₉ .₁₉₈ ₂₀₉₆ ₃₂ ᵜ₀₇₇ ⁴⁴⁸⁷ .⁷⁰⁹ .³⁰⁶ ₁²⁶² .⁴⁸⁹ ₁⁶⁹⁴ .⁶²⁵ .⁷¹² .²²⁷ ₁³⁶ .¹⁹⁵ ₁⁸⁷¹ .¹¹八 .៥七十-one -." target="_blank" aria-label="WhatsApp"><svg width="１８" height="１８" viewBox="０ ０ ２４ ２４" fill="currentColor"><path d="M１７．４７２ １４．３８２c－．２９７－．１４９－１．７５８－．８６７－２．０３－．９６７－．２７３－．０９９－．４７１－．１４８－．６７．１５－．１９７．２９７－．７６７．９６６－．９４ １．１６４－．１７３．１９９－．３４７．２２３－．６４４．０７５－．２９７－．１５－１．２５５－．４６３－２．３９−１．４７５−０，８８３−０，７８８−１，４８−１，７６１−１，６５３−２，０５９−０，１７３−０，２９７−０，０１８−０，４５８＋０，１３−０，６０６＋０，１３４−０，１３３＋０，２９８−０，３４７＋０，４４６−０，５２＋０，１４９−０，１７４＋０，１９８−０，２９８＋０，２９８−０，４９７＋０，Ｏ九九−Ｏ，一九八＋Ｏ，Ｏ五−Ｏ，“三七一 −Ｏ，“零二五 −Ｏ，“零七五 −Ｏ，“一四九 −Ｏ，“六六九 −Ｏ，“一六二 −Ｏ，“九一六 −Ｏ，“二四七 −Ｏ，“四八七 −Ｏ，“五 −Ｏ，“六六九 −Ｏ，“五一 −Ｏ，“一七三 −Ｏ，“零零八 −Ｏ，“三七一 −Ｏ，“零一 −Ｏ，“五七 −ｏ，“零一 −ｏ，“一九八 Ｏ “零 Ｏ “五二 Ｏ “零七四 Ｏ “七八二 Ｏ “二七二 Ｏ “二九七 Ｏ “一一六 Ｏ “一一六 Ｏ “一一六 Ｏ “一一六 Ｏ “一一六 Ｏ “一一六 Ｏ “一一六 Ｏ “一一六 Ｏ “一一六 Ｏ “一一六 Ｏ “一一六 Ｏ “一一六 Ｏ “一一六 Ｏ “一一六 Ｏ “一一 six – O, one nine eight – O, zero five – O, three seven one – O, zero two five – O, zero seven five – O, one four nine – O, six six nine – O, nine one six – O, two four seven – O, four eight seven – O, five zero seven seven – O, four four eight seven – O, seven zero nine – O, three zero six – O, two six two – O, four eight nine – O, six nine four – O, six two five – O, seven one two – O, two two seven – O, three six —O—O—O—O—O—O—O—O—O—O—O—O—O—O—O—O—O—O—O—O—O—O—
-
-
+        <a href="https://wa.me/525582459065" target="_blank" aria-label="WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.55 4.116 1.516 5.849L.032 23.967l6.292-1.477A11.951 11.951 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.792 9.792 0 01-5.011-1.373l-.36-.213-3.733.877.899-3.636-.234-.374A9.787 9.787 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182 17.43 2.182 21.818 6.57 21.818 12c0 5.43-4.388 9.818-9.818 9.818z"/></svg></a>
+      </div>
     </div>
     <div class="footer-col">
       <h4>Servicios</h4>
@@ -915,6 +968,12 @@
       alert('Por favor completa todos los campos obligatorios marcados con *.');
       return;
     }
+    const telDigits = telefono.replace(/\D/g, '');
+    if (telDigits.length !== 10) {
+      alert('El teléfono debe contener exactamente 10 dígitos.');
+      document.getElementById('f-telefono').focus();
+      return;
+    }
     const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
     const [yr, mo, dy] = fecha.split('-');
     const fechaFmt = `${parseInt(dy)} de ${meses[parseInt(mo)-1]} de ${yr}`;
@@ -922,7 +981,7 @@
     const lineas = [
       '🍺 *COTIZACIÓN — LOS BARRILES ARAGÓN*', '',
       `👤 *Nombre:* ${nombre}`,
-      `📱 *Teléfono:* ${telefono}`,
+      `📱 *Teléfono:* ${telDigits}`,
       `📅 *Fecha del evento:* ${fechaFmt}`,
       `👥 *Invitados:* ${invitados}`,
       `🎉 *Tipo de evento:* ${tipo}`,
@@ -933,6 +992,13 @@
     lineas.push('', '_Enviado desde la página web de Los Barriles Aragón_');
     window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(lineas.join('\n'))}`, '_blank');
   });
+
+  /* ─── PHONE INPUT: digits only, max 10 ──────────────────── */
+  (function () {
+    const tel = document.getElementById('f-telefono');
+    if (!tel) return;
+    tel.addEventListener('input', () => { tel.value = tel.value.replace(/\D/g, '').slice(0, 10); });
+  })();
 </script>
 </body>
 </html>
