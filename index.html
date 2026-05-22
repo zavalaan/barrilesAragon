@@ -482,6 +482,29 @@
   .brand-badge:hover svg { opacity:1; }
   .service-icon { filter:grayscale(1) contrast(1.08); }
   .service-card.featured { border-color:var(--amber); }
+  .service-card { cursor:pointer; }
+
+  /* ============================================================
+     FLOATING FORM MODAL
+  ============================================================ */
+  #form-modal { position:fixed; inset:0; z-index:10000; display:none; align-items:flex-start; justify-content:center; padding:5vh 1rem; overflow-y:auto; }
+  #form-modal.open { display:flex; animation:fadeIn .28s ease; }
+  .form-modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.72); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); }
+  .form-modal-dialog {
+    position:relative; z-index:1; width:100%; max-width:560px; margin:auto;
+    background:var(--bg-1); border:var(--glass-border); border-radius:12px;
+    box-shadow:0 30px 80px rgba(0,0,0,.6); padding:2.4rem 1.8rem 2rem;
+    transform:translateY(14px); animation:heroFadeUp .4s .05s forwards ease;
+  }
+  .form-modal-eyebrow { font-family:'Cinzel', serif; font-size:.62rem; letter-spacing:.25em; text-transform:uppercase; color:var(--amber); display:block; margin-bottom:.4rem; }
+  .form-modal-title { font-family:'Playfair Display', serif; font-size:1.7rem; color:var(--cream); margin-bottom:.4rem; }
+  .form-modal-sub { font-style:italic; color:var(--text); opacity:.8; font-size:.92rem; margin-bottom:1.6rem; }
+  .form-modal-close {
+    position:absolute; top:1rem; right:1rem; width:38px; height:38px; border-radius:50%;
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.18); color:var(--cream);
+    font-size:1.1rem; line-height:1; display:flex; align-items:center; justify-content:center; transition:all .25s;
+  }
+  .form-modal-close:hover { background:rgba(255,255,255,.16); transform:rotate(90deg); }
   </style>
 </head>
 
@@ -531,7 +554,7 @@
         para quinceañeras, bodas, cumpleaños y todo evento que merezca brindar en grande.
       </p>
       <div class="hero-ctas">
-        <a href="https://wa.me/525582459065" target="_blank" class="btn btn-gold">
+        <a href="https://wa.me/525582459065" target="_blank" class="btn btn-gold" id="hero-cotizar">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.55 4.116 1.516 5.849L.032 23.967l6.292-1.477A11.951 11.951 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.792 9.792 0 01-5.011-1.373l-.36-.213-3.733.877.899-3.636-.234-.374A9.787 9.787 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182 17.43 2.182 21.818 6.57 21.818 12c0 5.43-4.388 9.818-9.818 9.818z"/></svg>
           Cotizar por WhatsApp
         </a>
@@ -868,6 +891,19 @@
 </section>
 
 
+<!-- ============================================================ FLOATING FORM MODAL ============================================================ -->
+<div id="form-modal" class="sec-dark" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Cotiza tu evento">
+  <div class="form-modal-overlay"></div>
+  <div class="form-modal-dialog">
+    <button class="form-modal-close" id="form-modal-close" aria-label="Cerrar">✕</button>
+    <span class="form-modal-eyebrow">Cotización gratuita</span>
+    <h3 class="form-modal-title">Cuéntanos de tu Evento</h3>
+    <p class="form-modal-sub">Llena el formulario y recibe tu cotización directo en WhatsApp.</p>
+    <div id="form-modal-body"></div>
+  </div>
+</div>
+
+
 <!-- ============================================================ WHATSAPP FLOAT ============================================================ -->
 <div class="wa-float">
   <div class="wa-bubble">¡Hola! ¿Cotizamos tu evento? 🍺</div>
@@ -974,6 +1010,12 @@
       document.getElementById('f-telefono').focus();
       return;
     }
+    const fechaEl = document.getElementById('f-fecha');
+    if (fechaEl.min && fecha < fechaEl.min) {
+      alert('La fecha del evento no puede ser anterior a hoy.');
+      fechaEl.focus();
+      return;
+    }
     const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
     const [yr, mo, dy] = fecha.split('-');
     const fechaFmt = `${parseInt(dy)} de ${meses[parseInt(mo)-1]} de ${yr}`;
@@ -991,6 +1033,7 @@
     if (notas) lineas.push(`📝 *Notas:* ${notas}`);
     lineas.push('', '_Enviado desde la página web de Los Barriles Aragón_');
     window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(lineas.join('\n'))}`, '_blank');
+    if (window.__closeFormModal) window.__closeFormModal();
   });
 
   /* ─── PHONE INPUT: digits only, max 10 ──────────────────── */
@@ -998,6 +1041,48 @@
     const tel = document.getElementById('f-telefono');
     if (!tel) return;
     tel.addEventListener('input', () => { tel.value = tel.value.replace(/\D/g, '').slice(0, 10); });
+  })();
+
+  /* ─── DATE: block past dates (min = today) ──────────────── */
+  (function () {
+    const f = document.getElementById('f-fecha');
+    if (!f) return;
+    const t = new Date();
+    f.min = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`;
+  })();
+
+  /* ─── FLOATING FORM MODAL (opens on service click) ──────── */
+  (function () {
+    const modal = document.getElementById('form-modal');
+    const body = document.getElementById('form-modal-body');
+    const closeBtn = document.getElementById('form-modal-close');
+    const formEl = document.getElementById('quote-form');
+    if (!modal || !body || !formEl) return;
+    const overlay = modal.querySelector('.form-modal-overlay');
+    let home = null;
+
+    function openModal() {
+      if (!home) home = { parent: formEl.parentNode, next: formEl.nextElementSibling };
+      body.appendChild(formEl);
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      if (home) { home.next ? home.parent.insertBefore(formEl, home.next) : home.parent.appendChild(formEl); }
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+    window.__closeFormModal = closeModal;
+
+    document.querySelectorAll('.service-card').forEach(card => card.addEventListener('click', openModal));
+    document.querySelectorAll('.service-card .service-badge').forEach(a => a.addEventListener('click', e => e.preventDefault()));
+    const heroBtn = document.getElementById('hero-cotizar');
+    if (heroBtn) heroBtn.addEventListener('click', e => { e.preventDefault(); openModal(); });
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', closeModal);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
   })();
 </script>
 </body>
